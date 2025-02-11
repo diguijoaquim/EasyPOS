@@ -2,7 +2,7 @@ import json
 import requests
 from datetime import datetime, timedelta
 
-def gettoken(username, password):
+def gettoken(username, password,token):
     url = 'https://ayt.sal.gy/api/v1/login/'
     headers = {
         'accept': 'application/json',
