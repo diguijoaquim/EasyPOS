@@ -269,7 +269,7 @@ def main(page:ft.Page):
         try:
             # Get token and categories
             token = page.client_storage.get("access_token")
-            categories_response = get_categories()
+            categories_response = get_categories(token)
             categories = categories_response.get("detail", [])
 
             # Create category buttons
@@ -676,6 +676,12 @@ def main(page:ft.Page):
                 elif selected_index == 4:
                     show_cashier_view()
 
+            def navigation_change2(e):
+                if e.control.selected_index == 0:  # Settings
+                    show_settings_view()
+                else:  # Logout
+                    logout()
+
             sidebar = ft.Container(
                 bgcolor=ft.Colors.WHITE,
                 col=1,
@@ -715,7 +721,7 @@ def main(page:ft.Page):
                                     ),
                                 ],
                                 expand=1,
-                                bgcolor=ft.Colors.WHITE
+                                bgcolor=ft.Colors.WHITE 
                             )
                         ),
                         ft.Container(
@@ -724,12 +730,16 @@ def main(page:ft.Page):
                                 expand=1,
                                 controls=[
                                     ft.NavigationRail(
-                                        height=80,
-                                        on_change=lambda e: show_settings_view(),
+                                        height=150,
+                                        on_change=navigation_change2,
                                         destinations=[
                                             ft.NavigationRailDestination(
                                                 icon=ft.Icons.SETTINGS,
                                                 label="Configurações",
+                                            ),
+                                            ft.NavigationRailDestination(
+                                                icon=ft.Icons.LOGOUT,
+                                                label="Logout",
                                             )
                                         ],
                                         bgcolor=ft.Colors.WHITE
@@ -994,7 +1004,9 @@ def main(page:ft.Page):
                 )
             ])
             page.update()
-
+    def logout():
+        page.client_storage.remove('access_token')
+        page.go('/login')
     def check_auth():
         
         # Verificar se já existe uma sessão válida

@@ -2,7 +2,7 @@ import json
 import requests
 from datetime import datetime, timedelta
 
-def gettoken(username, password,token):
+def gettoken(username, password):
     url = 'https://ayt.sal.gy/api/v1/login/'
     headers = {
         'accept': 'application/json',
@@ -129,9 +129,8 @@ def add_product(product_details):
     return {"status": "success", "product_id": 54321}
 
 
-def get_categories():
+def get_categories(token):
     url = "https://ayt.sal.gy/api/v1/cat/lst"
-    token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM4MTY0MzA0LCJpYXQiOjE3MzgxNTM1MDQsImp0aSI6IjU5MmRmYzMyZDY0NjQ5Mzg4ZjQwZTljYjZlODg3Y2UzIiwidXNlcl9pZCI6MiwiaWQiOjIsInVzZXJuYW1lIjoiYWRtaW4ifQ.bRHG0cYfykdxb99dDQMK-xxr8vCBoEDdiEwh9zngb0U'
     headers = {
         "accept": "application/json",
         "Authorization": f"Bearer {token}"
