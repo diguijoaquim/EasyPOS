@@ -3,56 +3,7 @@ import json
 import requests
 from datetime import datetime
 from controllers import gettoken, getproducts, get_tables, reserve_table, occupy_table, release_table, get_categories  # Atualizando importação
-import subprocess
-import sys
-import os
-import time
-import signal
-import atexit
 
-# Add at the top of your file, before the main function
-server_process = None
-
-def start_server():
-    global server_process
-    try:
-        # Get the directory where main.py is located
-        current_dir = os.path.dirname(os.path.abspath(__file__))
-        server_path = os.path.join(current_dir, 'simple_server.py')
-        
-        # Start the server as a subprocess
-        server_process = subprocess.Popen([sys.executable, server_path], 
-                                        stdout=subprocess.PIPE,
-                                        stderr=subprocess.PIPE)
-        
-        # Wait a bit for the server to start
-        time.sleep(2)
-        
-        # Check if server started successfully
-        if server_process.poll() is None:
-            print("Server started successfully")
-        else:
-            stdout, stderr = server_process.communicate()
-            print(f"Server failed to start: {stderr.decode()}")
-            sys.exit(1)
-            
-    except Exception as e:
-        print(f"Error starting server: {str(e)}")
-        sys.exit(1)
-
-def stop_server():
-    global server_process
-    if server_process:
-        print("Stopping server...")
-        if sys.platform == 'win32':
-            server_process.terminate()
-        else:
-            os.kill(server_process.pid, signal.SIGTERM)
-        server_process.wait()
-        print("Server stopped")
-
-# Register the cleanup function
-atexit.register(stop_server)
 
 body = ft.Container(
         col=8.5,
@@ -1059,6 +1010,25 @@ def main(page:ft.Page):
         page.views.clear()
         
         if page.route == "/login":
+            page.add(
+                ft.Container(
+                    expand=True,
+                    alignment=ft.alignment.center,  # Centraliza vertical e horizontalmente
+                    content=ft.Row(
+                        [
+                            ft.Column(
+                                [
+                                    ft.ProgressRing(width=100, height=100, color=ft.Colors.ORANGE, bgcolor=ft.Colors.GREEN_400),
+                                    ft.Text("EsayPOS is loading ...", weight='bold', color=ft.Colors.GREEN_600, size=30)
+                                ],
+                                alignment=ft.MainAxisAlignment.CENTER,           # Centraliza verticalmente
+                                horizontal_alignment=ft.CrossAxisAlignment.CENTER  # Centraliza horizontalmente
+                            )
+                        ],
+                        alignment=ft.MainAxisAlignment.CENTER  # Garante o alinhamento da Row
+                    )
+                )
+            )
             if check_auth():
                 return
             
@@ -1141,6 +1111,26 @@ def main(page:ft.Page):
     page.on_view_pop = view_pop
 
     # Iniciar verificando autenticação
+    page.add(
+        ft.Container(
+            expand=True,
+            alignment=ft.alignment.center,  # Centraliza vertical e horizontalmente
+            content=ft.Row(
+                [
+                    ft.Column(
+                        [
+                            ft.ProgressRing(width=100, height=100, color=ft.Colors.ORANGE, bgcolor=ft.Colors.GREEN_400),
+                            ft.Text("EsayPOS is loading ...", weight='bold', color=ft.Colors.GREEN_600, size=30)
+                        ],
+                        alignment=ft.MainAxisAlignment.CENTER,           # Centraliza verticalmente
+                        horizontal_alignment=ft.CrossAxisAlignment.CENTER  # Centraliza horizontalmente
+                    )
+                ],
+                alignment=ft.MainAxisAlignment.CENTER  # Garante o alinhamento da Row
+            )
+        )
+    )
+
     if not check_auth():
         page.go("/login")
 
