@@ -2,7 +2,7 @@ import flet as ft #import flet libs
 import json
 import requests
 from datetime import datetime
-from controllers import gettoken, getproducts, get_tables, reserve_table, occupy_table, release_table, get_categories  # Atualizando importação
+from controllers import gettoken, getproducts, get_tables,get_orders, reserve_table, occupy_table, release_table, get_categories  # Atualizando importação
 
 
 body = ft.Container(
@@ -269,8 +269,11 @@ def main(page:ft.Page):
         try:
             # Get token and categories
             token = page.client_storage.get("access_token")
-            categories_response = get_categories(token)
-            categories = categories_response.get("detail", [])
+            try:
+                categories_response = get_categories(token)
+                categories = categories_response.get("detail", [])
+            except:
+                categories=[]
 
             # Create category buttons
             category_buttons = [
@@ -484,6 +487,45 @@ def main(page:ft.Page):
                 page.update()
 
                 try:
+                    table=ft.DataTable(
+                                    bgcolor=ft.Colors.WHITE,
+                                    border_radius=10,
+                                    heading_row_height=50,
+                                    heading_text_style=ft.TextStyle(
+                                        weight=ft.FontWeight.BOLD,
+                                        color=ft.Colors.BLACK,
+                                    ),
+                                    columns=[
+                                        ft.DataColumn(ft.Text("Transaction ID")),
+                                        ft.DataColumn(ft.Text("Date")),
+                                        ft.DataColumn(ft.Text("Amount")),
+                                        ft.DataColumn(ft.Text("Orders")),
+                                        ft.DataColumn(ft.Text("Category")),
+                                        ft.DataColumn(ft.Text("Menu")),
+                                    ],
+                                    
+                                )
+                    orders=json.loads(get_orders())
+                    for order in orders:
+                        table.rows.append(
+                                        ft.DataRow(cells=[
+                                            ft.DataCell(ft.Text(order['id'])),
+                                            ft.DataCell(ft.Text(order['date'])),
+                                            ft.DataCell(ft.Text(order['amount'])),
+                                            ft.DataCell(ft.Text("2")),
+                                            ft.DataCell(
+                                                ft.Container(
+                                                    content=ft.Text(order['cat'], color=ft.Colors.BLUE),
+                                                    bgcolor=ft.Colors.BLUE_50,
+                                                    padding=5,
+                                                    border_radius=15,
+                                                )
+                                            ),
+                                            ft.DataCell(ft.Text(order['menu'])),
+                                        ]),
+                                        )
+
+                        
                     # Fetch orders data
                     # ... rest of orders view code ...
                     body.content = ft.Column([
@@ -508,56 +550,7 @@ def main(page:ft.Page):
                                     ft.TextButton("All"),
                                     ft.TextButton("last Month"),
                                 ]),
-                                ft.DataTable(
-                                    bgcolor=ft.Colors.WHITE,
-                                    border_radius=10,
-                                    heading_row_height=50,
-                                    heading_text_style=ft.TextStyle(
-                                        weight=ft.FontWeight.BOLD,
-                                        color=ft.Colors.BLACK,
-                                    ),
-                                    columns=[
-                                        ft.DataColumn(ft.Text("Transaction ID")),
-                                        ft.DataColumn(ft.Text("Date")),
-                                        ft.DataColumn(ft.Text("Amount")),
-                                        ft.DataColumn(ft.Text("Orders")),
-                                        ft.DataColumn(ft.Text("Category")),
-                                        ft.DataColumn(ft.Text("Menu")),
-                                    ],
-                                    rows=[
-                                        ft.DataRow(cells=[
-                                            ft.DataCell(ft.Text("12415346512")),
-                                            ft.DataCell(ft.Text("Wed 1:00pm")),
-                                            ft.DataCell(ft.Text("$18.99")),
-                                            ft.DataCell(ft.Text("2")),
-                                            ft.DataCell(
-                                                ft.Container(
-                                                    content=ft.Text("Food", color=ft.Colors.BLUE),
-                                                    bgcolor=ft.Colors.BLUE_50,
-                                                    padding=5,
-                                                    border_radius=15,
-                                                )
-                                            ),
-                                            ft.DataCell(ft.Text("Mac and Cheese")),
-                                        ]),
-                                        ft.DataRow(cells=[
-                                            ft.DataCell(ft.Text("12415346512")),
-                                            ft.DataCell(ft.Text("Wed 7:20am")),
-                                            ft.DataCell(ft.Text("$4.50")),
-                                            ft.DataCell(ft.Text("3")),
-                                            ft.DataCell(
-                                                ft.Container(
-                                                    content=ft.Text("Food", color=ft.Colors.BLUE),
-                                                    bgcolor=ft.Colors.BLUE_50,
-                                                    padding=5,
-                                                    border_radius=15,
-                                                )
-                                            ),
-                                            ft.DataCell(ft.Text("Chili Cheese Dog")),
-                                        ]),
-                                        # ... mais linhas de pedidos ...
-                                    ],
-                                ),
+                                table,
                                 ft.Container(
                                     content=ft.Text("Load More", color=ft.Colors.ORANGE),
                                     on_click=lambda _: print("Load more clicked"),
@@ -922,6 +915,23 @@ def main(page:ft.Page):
 
             # Definindo as diferentes views
             def show_customers_view():
+                table=ft.DataTable(
+                                bgcolor=ft.Colors.WHITE,
+                                border_radius=10,
+                                heading_row_height=50,
+                                heading_text_style=ft.TextStyle(
+                                    weight=ft.FontWeight.BOLD,
+                                    color=ft.Colors.BLACK,
+                                ),
+                                columns=[
+                                    ft.DataColumn(ft.Text("Customer")),
+                                    ft.DataColumn(ft.Text("Email")),
+                                    ft.DataColumn(ft.Text("Total Orders")),
+                                    ft.DataColumn(ft.Text("Status")),
+                                    ft.DataColumn(ft.Text("Actions")),
+                                ],
+                                rows=[])
+                
                 body.content = ft.Column([
                     ft.Container(
                         bgcolor=ft.Colors.WHITE,
@@ -940,22 +950,16 @@ def main(page:ft.Page):
                                     )
                                 )
                             ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
-                            ft.DataTable(
-                                bgcolor=ft.Colors.WHITE,
-                                border_radius=10,
-                                heading_row_height=50,
-                                heading_text_style=ft.TextStyle(
-                                    weight=ft.FontWeight.BOLD,
-                                    color=ft.Colors.BLACK,
-                                ),
-                                columns=[
-                                    ft.DataColumn(ft.Text("Customer")),
-                                    ft.DataColumn(ft.Text("Email")),
-                                    ft.DataColumn(ft.Text("Total Orders")),
-                                    ft.DataColumn(ft.Text("Status")),
-                                    ft.DataColumn(ft.Text("Actions")),
-                                ],
-                                rows=[
+                            table
+                        ])
+                    )
+                ])
+                page.update()
+                from controllers import get_customers
+                clients=json.loads(get_customers())
+                table.rows.clear()
+                for client in clients:
+                    table.rows.append(
                                     ft.DataRow(cells=[
                                         ft.DataCell(
                                             ft.Row([
@@ -963,14 +967,14 @@ def main(page:ft.Page):
                                                     content=ft.Text("JS"),
                                                     bgcolor=ft.Colors.BLUE_100,
                                                 ),
-                                                ft.Text("João Silva")
+                                                ft.Text(client['name'])
                                             ])
                                         ),
-                                        ft.DataCell(ft.Text("joao@email.com")),
-                                        ft.DataCell(ft.Text("5")),
+                                        ft.DataCell(ft.Text(client['adress'])),
+                                        ft.DataCell(ft.Text(client['orders'])),
                                         ft.DataCell(
                                             ft.Container(
-                                                content=ft.Text("Active", color=ft.Colors.GREEN),
+                                                content=ft.Text(client['status'], color=ft.Colors.GREEN),
                                                 bgcolor=ft.Colors.GREEN_50,
                                                 padding=5,
                                                 border_radius=15,
@@ -983,13 +987,10 @@ def main(page:ft.Page):
                                             ])
                                         ),
                                     ]),
-                                    # ... mais linhas de clientes ...
-                                ],
-                            ),
-                        ])
                     )
-                ])
                 page.update()
+
+                
 
             # Inicialize com a view home
             show_home_view()

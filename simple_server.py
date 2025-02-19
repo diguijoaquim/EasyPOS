@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-
+from datetime import datetime
 app = FastAPI()
 db = [
     {
@@ -116,6 +116,52 @@ db = [
 def products():
     return db
 
+@app.get('/customers')
+def customs():
+    return [
+        {'name':'Diqui Joaquim','adress':'djoaquimnamueto@gmail.com','contact':'+258860716912','orders':5,'status':'active'},
+        {'name':'Diqui Joaquim','adress':'djoaquimnamueto@gmail.com','contact':'+258860716912','orders':5,'status':'active'},
+        {'name':'Diqui Joaquim','adress':'djoaquimnamueto@gmail.com','contact':'+258860716912','orders':5,'status':'active'},
+        {'name':'Diqui Joaquim','adress':'djoaquimnamueto@gmail.com','contact':'+258860716912','orders':5,'status':'active'},
+        {'name':'Diqui Joaquim','adress':'djoaquimnamueto@gmail.com','contact':'+258860716912','orders':5,'status':'active'},
+        {'name':'Diqui Joaquim','adress':'djoaquimnamueto@gmail.com','contact':'+258860716912','orders':5,'status':'active'},
+        {'name':'Diqui Joaquim','adress':'djoaquimnamueto@gmail.com','contact':'+258860716912','orders':5,'status':'active'},
+        {'name':'Diqui Joaquim','adress':'djoaquimnamueto@gmail.com','contact':'+258860716912','orders':5,'status':'active'},
+        {'name':'Diqui Joaquim','adress':'djoaquimnamueto@gmail.com','contact':'+258860716912','orders':5,'status':'active'},
+        {'name':'Diqui Joaquim','adress':'djoaquimnamueto@gmail.com','contact':'+258860716912','orders':5,'status':'active'},
+        {'name':'Diqui Joaquim','adress':'djoaquimnamueto@gmail.com','contact':'+258860716912','orders':5,'status':'active'},
+        {'name':'Diqui Joaquim','adress':'djoaquimnamueto@gmail.com','contact':'+258860716912','orders':5,'status':'active'},
+        {'name':'Diqui Joaquim','adress':'djoaquimnamueto@gmail.com','contact':'+258860716912','orders':5,'status':'active'},
+        {'name':'Diqui Joaquim','adress':'djoaquimnamueto@gmail.com','contact':'+258860716912','orders':5,'status':'active'},
+        {'name':'Diqui Joaquim','adress':'djoaquimnamueto@gmail.com','contact':'+258860716912','orders':5,'status':'active'},
+        {'name':'Diqui Joaquim','adress':'djoaquimnamueto@gmail.com','contact':'+258860716912','orders':5,'status':'active'},
+        {'name':'Diqui Joaquim','adress':'djoaquimnamueto@gmail.com','contact':'+258860716912','orders':5,'status':'active'},
+        {'name':'Diqui Joaquim','adress':'djoaquimnamueto@gmail.com','contact':'+258860716912','orders':5,'status':'active'},
+        
+    ]
+
+@app.get('/orders')
+def get_orders():
+    return [
+        {'id':"27728",'date':datetime.now(),'amount':56,'cat':"food",'menu':"xima arroz"},
+        {'id':"27728",'date':datetime.now(),'amount':56,'cat':"food",'menu':"xima arroz"},
+        {'id':"27728",'date':datetime.now(),'amount':56,'cat':"food",'menu':"xima arroz"},
+        {'id':"27728",'date':datetime.now(),'amount':56,'cat':"food",'menu':"xima arroz"},
+        {'id':"27728",'date':datetime.now(),'amount':56,'cat':"food",'menu':"xima arroz"},
+        {'id':"27728",'date':datetime.now(),'amount':56,'cat':"food",'menu':"xima arroz"},
+        {'id':"27728",'date':datetime.now(),'amount':56,'cat':"food",'menu':"xima arroz"},
+        {'id':"27728",'date':datetime.now(),'amount':56,'cat':"food",'menu':"xima arroz"},
+        {'id':"27728",'date':datetime.now(),'amount':56,'cat':"food",'menu':"xima arroz"},
+        {'id':"27728",'date':datetime.now(),'amount':56,'cat':"food",'menu':"xima arroz"},
+        {'id':"27728",'date':datetime.now(),'amount':56,'cat':"food",'menu':"xima arroz"},
+        {'id':"27728",'date':datetime.now(),'amount':56,'cat':"food",'menu':"xima arroz"},
+        {'id':"27728",'date':datetime.now(),'amount':56,'cat':"food",'menu':"xima arroz"},
+        {'id':"27728",'date':datetime.now(),'amount':56,'cat':"food",'menu':"xima arroz"},
+        {'id':"27728",'date':datetime.now(),'amount':56,'cat':"food",'menu':"xima arroz"},
+        {'id':"27728",'date':datetime.now(),'amount':56,'cat':"food",'menu':"xima arroz"},
+        {'id':"27728",'date':datetime.now(),'amount':56,'cat':"food",'menu':"xima arroz"},
+        {'id':"27728",'date':datetime.now(),'amount':56,'cat':"food",'menu':"xima arroz"},
+    ]
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app)

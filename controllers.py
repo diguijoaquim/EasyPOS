@@ -128,6 +128,19 @@ def add_product(product_details):
     print(f"Adding product: {product_details}")
     return {"status": "success", "product_id": 54321}
 
+def get_customers():
+    try:
+        return requests.get('http://127.0.0.1:8000/customers').text
+    except:
+        return []
+
+def get_orders():
+    try:
+        return requests.get('http://127.0.0.1:8000/orders').text
+    except:
+        return []
+    
+
 
 def get_categories(token):
     url = "https://ayt.sal.gy/api/v1/cat/lst"
